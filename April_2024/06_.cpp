@@ -51,7 +51,7 @@ public:
         while(curr!=nullptr){
             while(!st.empty() && st.top()->val < curr->val){
                 ListNode* a=st.top();
-                st.pop();
+                st.pop(); 
             }
             st.push(curr);
             curr=curr->next;

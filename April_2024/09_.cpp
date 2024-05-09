@@ -71,7 +71,7 @@ public:
     long long maximumHappinessSum(vector<int>& happiness, int k) {
 
         sort(begin(happiness),end(happiness),greater<int>());
-        int i=0;
+        int i=0; 
         long long ans=0;
 
         while(k--){

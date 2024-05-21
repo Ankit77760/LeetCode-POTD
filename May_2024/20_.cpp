@@ -58,7 +58,7 @@ public:
             int subsetXor=0;
             for(int j=0;j<n;j++){
                 if(i &(1<<j)){
-                    subsetXor^=nums[j];
+        21            subsetXor^=nums[j];
                 }
             }
             totalSum+=subsetXor;

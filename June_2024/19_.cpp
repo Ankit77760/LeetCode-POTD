@@ -86,3 +86,51 @@ public:
         
     }
 };
+
+
+//binary search
+#include<bits/stdc++.h>
+using namespace std;
+
+class Solution {
+public:
+    bool possible(vector<int>&arr,int day,int m,int k){
+        int cnt=0;
+        int noofBooques=0;
+        for(int i=0;i<arr.size();i++){
+            if(day>=arr[i]){
+                cnt++;
+                if(cnt==k){
+                    noofBooques++;
+                    cnt=0;
+                }
+            }
+            else{
+                cnt=0;
+            }
+        }
+        noofBooques+=(cnt/k);
+        if(noofBooques>=m) return true;
+        return false;
+    }
+    
+    int minDays(vector<int>& bloomDay, int m, int k) {
+        int n=bloomDay.size();
+        int mini = *min_element(bloomDay.begin(), bloomDay.end());
+        int maxi = *max_element(bloomDay.begin(), bloomDay.end());
+        
+        int ans=-1;
+        while(mini<=maxi){
+            int mid=(mini+maxi)/2;
+            if(possible(bloomDay,mid,m,k)){
+                ans=mid;
+                maxi=mid-1;
+            }
+            else{
+                mini=mid+1;
+            }
+        }
+        return ans;
+        
+    }
+};

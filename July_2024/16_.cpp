@@ -1,45 +1,44 @@
-//2196. Create Binary Tree From Descriptions
-/*You are given a 2D integer array descriptions where descriptions[i] = [parenti, childi, isLefti] indicates that parenti is the parent of childi in a binary tree of unique values. Furthermore,
+2096. Step-By-Step Directions From a Binary Tree Node to Another
+/*
+You are given the root of a binary tree with n nodes. Each node is uniquely assigned a value from 1 to n. You are also given an integer startValue representing the value of the start node s, and a different integer destValue representing the value of the destination node t.
 
-If isLefti == 1, then childi is the left child of parenti.
-If isLefti == 0, then childi is the right child of parenti.
-Construct the binary tree described by descriptions and return its root.
+Find the shortest path starting from node s and ending at node t. Generate step-by-step directions of such path as a string consisting of only the uppercase letters 'L', 'R', and 'U'. Each letter indicates a specific direction:
 
-The test cases will be generated such that the binary tree is valid.
+'L' means to go from a node to its left child node.
+'R' means to go from a node to its right child node.
+'U' means to go from a node to its parent node.
+Return the step-by-step directions of the shortest path from node s to node t.
 
  
 
 Example 1:
 
 
-Input: descriptions = [[20,15,1],[20,17,0],[50,20,1],[50,80,0],[80,19,1]]
-Output: [50,20,80,15,17,19]
-Explanation: The root node is the node with value 50 since it has no parent.
-The resulting binary tree is shown in the diagram.
+Input: root = [5,1,2,3,null,6,4], startValue = 3, destValue = 6
+Output: "UURL"
+Explanation: The shortest path is: 3 → 1 → 5 → 2 → 6.
 Example 2:
 
 
-Input: descriptions = [[1,2,1],[2,3,0],[3,4,1]]
-Output: [1,2,null,null,3,4]
-Explanation: The root node is the node with value 1 since it has no parent.
-The resulting binary tree is shown in the diagram.
+Input: root = [2,1], startValue = 2, destValue = 1
+Output: "L"
+Explanation: The shortest path is: 2 → 1.
  
 
 Constraints:
 
-1 <= descriptions.length <= 104
-descriptions[i].length == 3
-1 <= parenti, childi <= 105
-0 <= isLefti <= 1
-The binary tree described by descriptions is valid.
+The number of nodes in the tree is n.
+2 <= n <= 105
+1 <= Node.val <= n
+All the values in the tree are unique.
+1 <= startValue, destValue <= n
+startValue != destValue
 Accepted
-69,714
+140,625
 Submissions
-88,724
+267,677
 */
-
 //Solutions
-#include<bits/stdc++.h>
 /**
  * Definition for a binary tree node.
  * struct TreeNode {
@@ -53,33 +52,42 @@ Submissions
  */
 class Solution {
 public:
-    
-    
-    TreeNode* createBinaryTree(vector<vector<int>>& description) {
-        unordered_map<int,TreeNode*>mp;
-        unordered_set<int>parents;
-        for(int i=0;i<description.size();i++){
-            if(mp.find(description[i][0])==mp.end()){
-                mp[description[i][0]]=new TreeNode(description[i][0]);
-            }
-            if(mp.find(description[i][1])==mp.end()){
-                mp[description[i][1]]=new TreeNode(description[i][1]);
-            }
-            parents.insert(description[i][1]);
+    void helper(TreeNode*root,int &n,int &m,string &temp,string &s,string &d){
+        if(!root) return ;
+        if(root->val==n){
+            s=temp;
+        }
+        if(root->val==m){
+            d=temp;
         }
         
-        TreeNode* head;
-        for(int i=0;i<description.size();i++){
-            if(description[i][2]){
-                mp[description[i][0]]->left=mp[description[i][1]];
-            }
-            else{
-                mp[description[i][0]]->right=mp[description[i][1]];
-            }
-            if(parents.find(description[i][0])==parents.end()){
-                head=mp[description[i][0]];
-            }
-        }
-        return head;
+        temp.push_back('L');
+        helper(root->left,n,m,temp,s,d);
+        temp.pop_back();
         
-    }    };
+        temp.push_back('R');
+        helper(root->right,n,m,temp,s,d);
+        temp.pop_back();
+    }
+    
+    string getDirections(TreeNode* root, int n, int m) {
+        string s,d,temp;
+        helper(root,n,m,temp,s,d);
+        
+        int idx=0;
+        for(int i=0;i<s.size() && i<d.size();i++){
+            if(s[i]==d[i]) idx++;
+            else break;
+        }
+        
+        string ans="";
+        for(int i=idx;i<s.size();i++){
+            ans+='U';
+        }
+        for(int i=idx;i<d.size();i++){
+            ans+=d[i];
+        }
+        return ans;
+        
+    }
+};
